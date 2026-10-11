@@ -1,0 +1,12 @@
+# Core Network Automation & SSH
+paramiko>=3.5.0
+
+# Configuration Parsing & Serialization
+pyyaml>=6.0.2
+
+# REST API & HTTP Automation
+requests>=2.32.3
+
+# Terminal Output Formatting & CLI Helpers
+tabulate>=0.9.0
+colorama>=0.4.6

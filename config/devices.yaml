@@ -1,0 +1,90 @@
+# ==============================================================================
+# Network Infrastructure Inventory & Connection Configuration
+# ==============================================================================
+# Defines connection parameters, platform drivers, and topology grouping
+# for automated configuration management and telemetry collection.
+# ==============================================================================
+
+defaults:
+  connection_timeout: 10
+  banner_timeout: 15
+  ssh_port: 22
+  api_port: 443
+  retries: 3
+
+groups:
+  core_switches:
+    description: "Datacenter Core Backbone Switches"
+    platform: "arista_eos"
+    devices:
+      - name: "core-sw-01"
+        host: "10.100.1.1"
+        site: "dc-primary"
+        role: "backbone"
+        credentials:
+          auth_type: "key"
+          username: "netops"
+          key_path: "~/.ssh/netops_rsa"
+        tags:
+          - "critical"
+          - "spine"
+
+      - name: "core-sw-02"
+        host: "10.100.1.2"
+        site: "dc-primary"
+        role: "backbone"
+        credentials:
+          auth_type: "key"
+          username: "netops"
+          key_path: "~/.ssh/netops_rsa"
+        tags:
+          - "critical"
+          - "spine"
+
+  edge_routers:
+    description: "BGP WAN Edge Routers"
+    platform: "cisco_ios"
+    devices:
+      - name: "edge-rtr-01"
+        host: "192.168.10.1"
+        site: "dc-primary"
+        role: "wan-gateway"
+        credentials:
+          auth_type: "password"
+          username_env: "ROUTER_USER"
+          password_env: "ROUTER_PASSWORD"
+        tags:
+          - "wan"
+          - "bgp"
+
+  firewalls:
+    description: "Perimeter Security Appliances"
+    platform: "paloalto_panos"
+    devices:
+      - name: "fw-perimeter-01"
+        host: "10.100.0.1"
+        site: "dc-primary"
+        role: "firewall"
+        credentials:
+          auth_type: "token"
+          api_token_env: "PAN_API_KEY"
+        tags:
+          - "security"
+          - "perimeter"
+
+  linux_gateways:
+    description: "Linux Ingress & VPN Bastion Gateways"
+    platform: "linux"
+    devices:
+      - name: "gw-bastion-01"
+        host: "127.0.0.1"
+        ssh_port: 22
+        site: "local-infra"
+        role: "bastion"
+        credentials:
+          auth_type: "key"
+          username: "admin"
+          key_path: "~/.ssh/id_rsa"
+        tags:
+          - "bastion"
+          - "linux"
